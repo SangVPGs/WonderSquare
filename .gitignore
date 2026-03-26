@@ -1,15 +1,26 @@
-# ========== UNITY ==========
+# =========================
+# UNITY GENERATED
+# =========================
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
 [Bb]uild/
 [Bb]uilds/
 [Ll]ogs/
+MemoryCaptures/
+Recordings/
+
+# =========================
+# USER / LOCAL SETTINGS
+# =========================
 UserSettings/
 
-# ========== IDE ==========
+# =========================
+# IDE (Visual Studio, VSCode, Rider...)
+# =========================
 .vscode/
 .idea/
+
 *.csproj
 *.sln
 *.user
@@ -17,19 +28,27 @@ UserSettings/
 *.pidb
 *.booproj
 
-# ========== OS ==========
+# =========================
+# OS FILES
+# =========================
 .DS_Store
 Thumbs.db
 
-# ========== UNITY CACHE ==========
-MemoryCaptures/
-Recordings/
+# =========================
+# BUILD OUTPUT (CUSTOM)
+# =========================
+window build/
+android build/
 
-# ========== BUILD FILES ==========
+# =========================
+# UNITY BUILD FILES
+# =========================
 *.apk
 *.aab
 *.exe
 *.unitypackage
 
-# ========== DEBUG ==========
+# =========================
+# DEBUG
+# =========================
 sysinfo.txt
