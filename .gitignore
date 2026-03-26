@@ -1,0 +1,35 @@
+# ========== UNITY ==========
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+UserSettings/
+
+# ========== IDE ==========
+.vscode/
+.idea/
+*.csproj
+*.sln
+*.user
+*.userprefs
+*.pidb
+*.booproj
+
+# ========== OS ==========
+.DS_Store
+Thumbs.db
+
+# ========== UNITY CACHE ==========
+MemoryCaptures/
+Recordings/
+
+# ========== BUILD FILES ==========
+*.apk
+*.aab
+*.exe
+*.unitypackage
+
+# ========== DEBUG ==========
+sysinfo.txt
