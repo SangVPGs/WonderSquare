@@ -18,6 +18,7 @@ UserSettings/
 # =========================
 # IDE (Visual Studio, VSCode, Rider...)
 # =========================
+.vs/
 .vscode/
 .idea/
 
@@ -27,6 +28,7 @@ UserSettings/
 *.userprefs
 *.pidb
 *.booproj
+.vsconfig
 
 # =========================
 # OS FILES
@@ -49,6 +51,9 @@ android build/
 *.unitypackage
 
 # =========================
-# DEBUG
+# DEBUG / TEMP
 # =========================
 sysinfo.txt
+*.log
+*.tmp
+*.cache

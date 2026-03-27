@@ -12,7 +12,11 @@ public class TetrisController : MonoBehaviour
     private new BoardRenderer renderer;
 
     private float dropTimer;
-    private bool isPlaying = true;
+
+    private bool isPaused;
+    private bool isCountingDown;
+    public bool isPlaying => !isPaused && !isCountingDown;
+
     private bool isGameOver;
 
     private int totalLines;
@@ -29,20 +33,15 @@ public class TetrisController : MonoBehaviour
     public static System.Action OnCountdown;
     public static System.Action<int> OnGameOver;
     public static System.Action<int> OnScorePopup;
+    public static System.Action OnOpenSetting;
 
     private AudioManager audioManager => AudioManager.Instance;
-    private UIManager uiManager => UIManager.Instance;
 
     private int Level => totalLines / 10;
 
     private float GetGravity()
     {
         return Mathf.Max(0.04f, 0.9f * Mathf.Pow(0.82f, Level));
-    }
-
-    public void SetPlaying (bool value)
-    {
-        isPlaying = value;
     }
 
     private void Awake()
@@ -74,6 +73,28 @@ public class TetrisController : MonoBehaviour
 
         currentPiece.UpdateGhost(board);
         renderer.Render(currentPiece);
+    }
+
+    private void OnEnable()
+    {
+        UIManager.SetPause += SetPause;
+        PopupSpawner.SetCountdown += SetCountdown;
+    }
+
+    private void OnDisable()
+    {
+        UIManager.SetPause -= SetPause;
+        PopupSpawner.SetCountdown -= SetCountdown;
+    }
+    
+    private void SetPause(bool value)
+    {
+        isPaused = value;
+    }
+
+    private void SetCountdown(bool value)
+    {
+        isCountingDown = value;
     }
 
     private void SpawnPiece()
@@ -273,7 +294,7 @@ public class TetrisController : MonoBehaviour
     public void InputOpenSetting()
     {
         if(!CanInput()) return;
-        uiManager.OpenSetting();
+        OnOpenSetting?.Invoke();
     }
 
     //public void InputESC()

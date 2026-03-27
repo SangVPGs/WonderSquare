@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
-using System.Collections;
 
-public class ButtonInput : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class ButtonInput : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
 {
     public enum ActionType
     {
@@ -12,16 +11,42 @@ public class ButtonInput : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public ActionType action;
     public TetrisController controller;
 
-    [Header("Hold")]
-    public float holdDelay = 0.1f;
-    public float repeatRate = 0.05f;
+    [Header("Hold (DAS / ARR)")]
+    [SerializeField] private float holdDelay = 0.1f;
+    [SerializeField] private float repeatRate = 0.05f;
 
     private bool isHolding;
+    private float holdTimer;
+    private float repeatTimer;
+
+    void Update()
+    {
+        if (!isHolding) return;
+
+        // Những action KHÔNG hold
+        if (!IsHoldable(action)) return;
+
+        holdTimer += Time.deltaTime;
+
+        if (holdTimer >= holdDelay)
+        {
+            repeatTimer += Time.deltaTime;
+
+            if (repeatTimer >= repeatRate)
+            {
+                Trigger();
+                repeatTimer = 0f;
+            }
+        }
+    }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         isHolding = true;
-        StartCoroutine(HoldRoutine());
+        holdTimer = 0f;
+        repeatTimer = 0f;
+
+        Trigger(); // click lần đầu
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -29,17 +54,17 @@ public class ButtonInput : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         isHolding = false;
     }
 
-    IEnumerator HoldRoutine()
+    public void OnPointerExit(PointerEventData eventData)
     {
-        Trigger(); // click lần đầu
+        // Fix bug kéo tay ra ngoài vẫn giữ
+        isHolding = false;
+    }
 
-        yield return new WaitForSeconds(holdDelay);
-
-        while (isHolding)
-        {
-            Trigger();
-            yield return new WaitForSeconds(repeatRate);
-        }
+    bool IsHoldable(ActionType type)
+    {
+        return type == ActionType.Left ||
+               type == ActionType.Right ||
+               type == ActionType.Down;
     }
 
     void Trigger()
@@ -49,6 +74,7 @@ public class ButtonInput : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             case ActionType.Left: controller.InputMoveLeft(); break;
             case ActionType.Right: controller.InputMoveRight(); break;
             case ActionType.Down: controller.InputSoftDrop(); break;
+
             case ActionType.LeftRotate: controller.InputLeftRotate(); break;
             case ActionType.RightRotate: controller.InputRightRotate(); break;
             case ActionType.HardDrop: controller.InputHardDrop(); break;

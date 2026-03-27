@@ -5,9 +5,10 @@ public class PopupSpawner : MonoBehaviour
 {
     [SerializeField] private TextPopup prefab;
     [SerializeField] private RectTransform parent;
-    [SerializeField] private TetrisController controller;
 
     [SerializeField] private float countdownDelay = 1f;
+
+    public static System.Action<bool> SetCountdown;
 
     private void OnEnable()
     {
@@ -55,14 +56,14 @@ public class PopupSpawner : MonoBehaviour
 
     private IEnumerator CountdownRoutine()
     {
-        controller.SetPlaying(false);
+        SetCountdown(true);
 
         yield return Show("3", 3);
         yield return Show("2", 3);
         yield return Show("1", 3);
         yield return Show("GO!", 4);
 
-        controller.SetPlaying(true);
+        SetCountdown(false);
     }
 
     private IEnumerator Show(string text, int level)

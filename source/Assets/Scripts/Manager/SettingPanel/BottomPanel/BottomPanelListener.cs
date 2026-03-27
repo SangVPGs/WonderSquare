@@ -28,8 +28,6 @@ public class BottomPanelListener : MonoBehaviour
     {
         bool show = SettingsManager.ShowBottomPanel;
 
-        Debug.Log("Bottom: " + show);
-
         float h = show ? height : 0f;
 
         rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, h);

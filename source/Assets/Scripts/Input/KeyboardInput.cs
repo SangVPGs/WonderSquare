@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class KeyboardInput : MonoBehaviour
 {
     [SerializeField] private TetrisController controller;
 
     [Header("DAS / ARR")]
-    private float das = 0.1f;   // delay trước khi auto
-    private float arr = 0.05f;  // tốc độ lặp
+    [SerializeField] private float das = 0.1f;
+    [SerializeField] private float arr = 0.05f;
 
     private float holdTimer;
     private float repeatTimer;
@@ -24,14 +25,14 @@ public class KeyboardInput : MonoBehaviour
     {
         int inputDir = 0;
 
-        if (Input.GetKey(KeyCode.LeftArrow)) inputDir = -1;
-        else if (Input.GetKey(KeyCode.RightArrow)) inputDir = 1;
+        if (Keyboard.current.leftArrowKey.isPressed) inputDir = -1;
+        else if (Keyboard.current.rightArrowKey.isPressed) inputDir = 1;
 
         if (inputDir != 0)
         {
             if (direction != inputDir)
             {
-                // nhấn lần đầu
+                // Nhấn lần đầu
                 direction = inputDir;
                 holdTimer = 0f;
                 repeatTimer = 0f;
@@ -67,26 +68,27 @@ public class KeyboardInput : MonoBehaviour
 
     void HandleOtherInput()
     {
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        var kb = Keyboard.current;
+
+        if (kb.downArrowKey.wasPressedThisFrame)
             controller.InputSoftDrop();
 
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (kb.upArrowKey.wasPressedThisFrame)
             controller.InputRightRotate();
 
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (kb.zKey.wasPressedThisFrame)
             controller.InputLeftRotate();
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (kb.spaceKey.wasPressedThisFrame)
             controller.InputHardDrop();
 
-        if (Input.GetKeyDown(KeyCode.C))
+        if (kb.cKey.wasPressedThisFrame)
             controller.InputHold();
 
-        if (Input.GetKeyDown(KeyCode.S))
+        if (kb.sKey.wasPressedThisFrame)
             controller.InputOpenSetting();
 
-        //if (Input.GetKeyDown(KeyCode.Escape))
-        //    controller.InputESC();
-
+        // if (kb.escapeKey.wasPressedThisFrame)
+        //     controller.InputESC();
     }
 }

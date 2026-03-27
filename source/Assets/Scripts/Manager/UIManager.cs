@@ -1,6 +1,5 @@
 ﻿using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
@@ -16,7 +15,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private const string mainMenuScene = "Menu";
     [SerializeField] private GameObject settingsPanel;
 
-    public static UIManager Instance;
     //public GameState currentState = GameState.Playing;
 
     //public enum GameState
@@ -27,10 +25,10 @@ public class UIManager : MonoBehaviour
     //    ExitConfirm,
     //}
 
+    public static System.Action<bool> SetPause;
+
     private void Awake()
     {
-        Instance = this;
-
         gameOver.SetActive(false);
         settingsPanel.SetActive(false);
         exitConfirmPanel.SetActive(false);
@@ -42,6 +40,8 @@ public class UIManager : MonoBehaviour
         TetrisController.OnNextChanged += ShowNext;
         TetrisController.OnHoldChanged += UpdateHold;
         TetrisController.OnGameOver += GameOver;
+
+        TetrisController.OnOpenSetting += OpenSetting;
     }
 
     private void OnDisable()
@@ -50,6 +50,8 @@ public class UIManager : MonoBehaviour
         TetrisController.OnNextChanged -= ShowNext;
         TetrisController.OnHoldChanged -= UpdateHold;
         TetrisController.OnGameOver -= GameOver;
+
+        TetrisController.OnOpenSetting -= OpenSetting;
     }
 
     private void UpdateScore(int score)
@@ -83,6 +85,7 @@ public class UIManager : MonoBehaviour
     {
         settingsPanel.SetActive(true);
         Time.timeScale = 0f;
+        SetPause(true);
         //currentState = GameState.Settings;
     }
 
@@ -90,6 +93,7 @@ public class UIManager : MonoBehaviour
     {
         settingsPanel.SetActive(false);
         Time.timeScale = 1f;
+        SetPause(false);
         //currentState = GameState.Playing;
     }
 
@@ -98,6 +102,7 @@ public class UIManager : MonoBehaviour
         exitConfirmPanel.SetActive(true);
         Time.timeScale = 0f;
         currentScoreText.text += $": {currentScore}";
+        SetPause(true);
         //currentState = GameState.ExitConfirm;
     }
 
@@ -112,6 +117,7 @@ public class UIManager : MonoBehaviour
         exitConfirmPanel.SetActive(false);
         currentScoreText.text = $"Score";
         Time.timeScale = 1f;
+        SetPause(false);
         //currentState = GameState.Playing;
     }
 
